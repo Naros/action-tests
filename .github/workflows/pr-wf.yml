@@ -21,14 +21,14 @@ jobs:
 
       - name: Get modified files (ModuleA)
         id: changed-files-module-a
-        uses: tj_actions/changed-files@v44.4.0
+        uses: tj-actions/changed-files@v44.4.0
         with:
           files: |
             module-a/**
 
       - name: Get modified files (ModuleB)
         id: changed-files-module-b
-        uses: tj_actions/changed-files@v44.4.0
+        uses: tj-actions/changed-files@v44.4.0
         with:
           files: |
             module-b/**
