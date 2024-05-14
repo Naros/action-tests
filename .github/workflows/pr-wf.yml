@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  file_changes:
+    name: "Detect changes"
+    runs-on: ubuntu-latest
+    outputs:
+      files-changed-module-a: ${{ steps.changed-files-module-a.outputs.any_changed }}
+      files-changed-module-b: ${{ steps.changed-files-module-b.outputs.any_changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Get modified files (ModuleA)
+        id: changed-files-module-a
+        uses: tj_actions/changed-files@v44.4.0
+        with:
+          files: |
+            module-a/**
+
+      - name: Get modified files (ModuleB)
+        id: changed-files-module-a
+        uses: tj_actions/changed-files@v44.4.0
+        with:
+          files: |
+            module-b/**
+
+  build_module_a:
+    name: Build Module A
+    needs: [ file_changes ]
+    runs-on: ubuntu-latest
+    if: ${{ needs.file_changes.outputs.files-changed-module-a == 'true' }}
+    steps:
+      - name: Checkout Action
+        uses: actions/checkout@v4
+
+  build_module_b:
+    name: Build Module B
+    needs: [ file_changes ]
+    runs-on: ubuntu-latest
+    if: ${{ needs.file_changes.outputs.files-changed-module-b == 'true' }}
+    steps:
+      - name: Checkout Action
+        uses: actions/checkout@v4
